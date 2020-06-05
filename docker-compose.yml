@@ -1,0 +1,38 @@
+version: '3'
+ 
+services:
+    student-service:
+        build: ./api
+        container_name: parcialps
+        environment:
+            APP_PORT: 5000
+            MONGODB_DATABASE: colegio
+            MONGODB_HOSTNAME: mongodb
+        volumes:
+            - ./api/:/usr/src/api
+        ports:
+            - 5000:5000
+        depends_on:
+            - mongodb
+        networks: 
+            - backend
+          
+    mongodb:
+        image: mongo
+        container_name: mongodb
+        restart: unless-stopped
+        command: tail -F anything
+        command: mongod
+
+        environment: 
+            MONGO_INITDB_DATABASE: colegio
+        
+        networks: 
+            - backend
+
+
+networks:
+    frontend:
+        driver: bridge
+    backend:
+        driver: bridge
